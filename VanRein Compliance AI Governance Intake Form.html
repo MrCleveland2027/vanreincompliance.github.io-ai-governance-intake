@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VanRein Compliance — AI Governance Intake Form v1.0</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;600;700&family=Barlow+Condensed:wght@400;600;700&display=swap');
+
+  :root {
+    --navy:      #0D1B2E;
+    --teal:      #00B4D4;
+    --teal-dim:  #008fa8;
+    --label:     #5A7A99;
+    --field-bg:  #F2F7FB;
+    --field-bd:  #C5D8E8;
+    --foot-gray: #8DA9C4;
+    --white:     #ffffff;
+    --text:      #0D1B2E;
+    --red:       #E53935;
+    --gold:      #F59E0B;
+    --gold-bg:   #FFFBEB;
+    --gold-text: #92400E;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Barlow', sans-serif;
+    background: #e8eef4;
+    color: var(--text);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  /* ── PRINT STYLES ── */
+  @media print {
+    body { background: white; }
+    .page { box-shadow: none; margin: 0; border-radius: 0; }
+    .no-print { display: none; }
+    @page { margin: 0.5in; size: letter; }
+  }
+
+  /* ── WRAPPER ── */
+  .wrapper {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 24px 16px 48px;
+  }
+
+  /* ── PAGE CARD ── */
+  .page {
+    background: white;
+    box-shadow: 0 4px 24px rgba(13,27,46,0.12);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  /* ── HEADER CARD ── */
+  .header-card {
+    background: var(--navy);
+    padding: 22px 28px 20px;
+    position: relative;
+    border-bottom: 3px solid var(--teal);
+  }
+
+  .logo-img {
+    height: 22px;
+    width: auto;
+    display: block;
+    margin-bottom: 14px;
+    /* Logo is teal on transparent — renders perfectly on navy bg */
+  }
+
+  .form-title {
+    font-family: 'Barlow', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.25;
+    margin-bottom: 10px;
+  }
+
+  .form-subtitle {
+    font-size: 11px;
+    color: var(--foot-gray);
+    max-width: 600px;
+    line-height: 1.5;
+  }
+
+  .header-badge {
+    position: absolute;
+    top: 18px;
+    right: 28px;
+    background: var(--teal);
+    color: var(--navy);
+    font-size: 7px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    padding: 4px 8px;
+    border-radius: 3px;
+  }
+
+  /* ── FORM BODY ── */
+  .form-body {
+    padding: 0 28px 28px;
+  }
+
+  /* ── SECTION BAR ── */
+  .section-bar {
+    background: var(--navy);
+    margin: 20px -28px 14px;
+    padding: 0 28px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+
+  .section-num {
+    font-size: 8px;
+    font-weight: 600;
+    color: var(--teal);
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+    padding-right: 12px;
+  }
+
+  .section-divider {
+    width: 1px;
+    height: 16px;
+    background: #1E4070;
+    flex-shrink: 0;
+  }
+
+  .section-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: 0.04em;
+    padding-left: 12px;
+    flex: 1;
+  }
+
+  .section-badge {
+    font-size: 8px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 3px;
+    margin-left: auto;
+    white-space: nowrap;
+  }
+  .section-badge.required { background: var(--teal); color: var(--navy); }
+  .section-badge.critical  { background: #E53935; color: white; }
+
+  /* ── FIELD GRID ── */
+  .field-row   { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; margin-bottom: 10px; }
+  .field-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px 16px; margin-bottom: 10px; }
+  .field-full  { margin-bottom: 10px; }
+
+  /* ── LABEL ── */
+  .field-label {
+    font-size: 8.5px;
+    font-weight: 700;
+    color: var(--label);
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+    display: block;
+  }
+  .field-label .req { color: var(--red); }
+
+  /* ── INPUT / TEXTAREA ── */
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="date"],
+  textarea,
+  select {
+    width: 100%;
+    background: var(--field-bg);
+    border: 1px solid var(--field-bd);
+    border-radius: 2px;
+    padding: 6px 8px;
+    font-family: 'Barlow', sans-serif;
+    font-size: 12px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s;
+    display: block;
+  }
+  input[type="text"]:focus,
+  input[type="email"]:focus,
+  input[type="tel"]:focus,
+  textarea:focus,
+  select:focus { border-color: var(--teal); }
+
+  textarea { resize: vertical; min-height: 52px; }
+
+  /* ── PILL OPTIONS (checkbox / radio) ── */
+  .pill-grid   { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-bottom: 4px; }
+  .pill-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; margin-bottom: 4px; }
+  .pill-grid-1 { display: grid; grid-template-columns: 1fr; gap: 5px; margin-bottom: 4px; }
+
+  .pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--white);
+    border: 1px solid var(--field-bd);
+    border-radius: 3px;
+    padding: 5px 8px;
+    cursor: pointer;
+    transition: border-color 0.12s, background 0.12s;
+    font-size: 11.5px;
+    color: var(--text);
+  }
+  .pill:hover { border-color: var(--teal); background: #f0fafd; }
+  .pill input[type="checkbox"],
+  .pill input[type="radio"] {
+    width: 13px; height: 13px;
+    accent-color: var(--teal);
+    flex-shrink: 0;
+    margin: 0;
+    cursor: pointer;
+    border: none; padding: 0; background: none;
+  }
+
+  /* ── MATURITY OPTIONS (full-width radio) ── */
+  .maturity-pill {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--white);
+    border: 1px solid var(--field-bd);
+    border-radius: 3px;
+    padding: 7px 10px;
+    cursor: pointer;
+    margin-bottom: 5px;
+    font-size: 11.5px;
+    transition: border-color 0.12s, background 0.12s;
+  }
+  .maturity-pill:hover { border-color: var(--teal); background: #f0fafd; }
+  .maturity-pill input { width: 13px; height: 13px; accent-color: var(--teal); flex-shrink: 0; margin:0; cursor:pointer; border:none; padding:0; background:none; }
+  .maturity-label strong { display: block; font-size: 11.5px; font-weight: 600; color: var(--text); }
+  .maturity-label span   { font-size: 10.5px; color: var(--label); }
+
+  /* ── CONFIDENCE SCALE ── */
+  .confidence-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 5px;
+    margin-bottom: 4px;
+  }
+  .conf-pill {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--white);
+    border: 1px solid var(--field-bd);
+    border-radius: 3px;
+    padding: 6px 4px;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text);
+    gap: 3px;
+    transition: border-color 0.12s, background 0.12s;
+  }
+  .conf-pill:hover { border-color: var(--teal); background: #f0fafd; }
+  .conf-pill input { width: 12px; height: 12px; accent-color: var(--teal); margin:0; cursor:pointer; border:none; padding:0; background:none; }
+  .conf-sub { font-size: 8px; font-weight: 400; color: var(--label); }
+
+  /* ── NOTE BOX ── */
+  .note-box {
+    background: #EBF5FB;
+    border: 1px solid var(--teal);
+    border-radius: 3px;
+    padding: 8px 12px;
+    font-size: 10.5px;
+    font-style: italic;
+    color: var(--label);
+    margin-bottom: 12px;
+    line-height: 1.55;
+  }
+
+  /* ── LOYALTY BANNER ── */
+  .loyalty-banner {
+    background: var(--gold-bg);
+    border: 1px solid var(--gold);
+    border-radius: 3px;
+    padding: 8px 12px;
+    margin-bottom: 12px;
+  }
+  .loyalty-banner strong {
+    font-size: 11px;
+    color: var(--gold-text);
+    display: block;
+    margin-bottom: 2px;
+  }
+  .loyalty-banner span { font-size: 10.5px; color: var(--gold-text); }
+
+  /* ── PRICE CARDS ── */
+  .price-card {
+    border: 1px solid var(--field-bd);
+    border-radius: 4px;
+    padding: 14px 16px;
+    margin-bottom: 8px;
+    background: var(--field-bg);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0 16px;
+    align-items: start;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .price-card:hover { border-color: var(--teal-dim); }
+  .price-card.recommended {
+    border-color: var(--teal);
+    border-width: 1.5px;
+    background: #EBF5FB;
+    border-left: 4px solid var(--teal);
+  }
+
+  .price-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  .option-badge {
+    background: var(--navy);
+    color: var(--teal);
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 3px 8px;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+  .rec-badge {
+    background: var(--teal);
+    color: var(--navy);
+    font-size: 8px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 2px;
+    margin-left: auto;
+  }
+  .card-title { font-size: 14px; font-weight: 700; color: var(--navy); }
+
+  .price-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin: 4px 0 2px;
+  }
+  .price-tagline  { font-size: 11px; color: var(--teal-dim); font-style: italic; margin-bottom: 6px; }
+  .price-amount   { font-size: 22px; font-weight: 700; color: var(--navy); }
+  .price-discount { font-size: 10px; background: var(--teal); color: var(--navy); font-weight: 700; padding: 2px 6px; border-radius: 2px; align-self: center; }
+  .price-was    { font-size: 12px; color: var(--foot-gray); text-decoration: line-through; }
+  .price-monthly { font-size: 10.5px; color: var(--label); margin-bottom: 8px; }
+
+  .feature-list { list-style: none; margin: 0; padding: 0; }
+  .feature-list li {
+    font-size: 11.5px;
+    color: var(--text);
+    padding: 1.5px 0;
+    display: flex;
+    gap: 6px;
+    align-items: baseline;
+  }
+  .feature-list li::before { content: '▸'; color: var(--teal); font-size: 9px; flex-shrink: 0; margin-top: 1px; }
+  .feature-list li.best-for { color: var(--teal); font-weight: 600; font-size: 11px; margin-top: 4px; }
+  .feature-list li.best-for::before { content: ''; margin: 0; }
+
+  .card-radio {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 4px;
+  }
+  .card-radio input {
+    width: 16px; height: 16px;
+    accent-color: var(--teal);
+    cursor: pointer;
+    border: none; padding: 0; background: none;
+  }
+
+  /* ── SERVICE COMPONENTS ── */
+  .svc-row {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    gap: 0 10px;
+    align-items: center;
+    background: var(--field-bg);
+    border: 1px solid var(--field-bd);
+    border-radius: 3px;
+    padding: 8px 10px;
+    margin-bottom: 5px;
+  }
+  .svc-num {
+    background: var(--teal);
+    color: var(--navy);
+    font-weight: 700;
+    font-size: 11px;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 28px;
+    width: 28px;
+    flex-shrink: 0;
+  }
+  .svc-content strong { font-size: 12px; font-weight: 600; color: var(--navy); display: block; margin-bottom: 2px; }
+  .svc-content span   { font-size: 10.5px; color: var(--label); line-height: 1.45; }
+
+  /* ── ATTESTATION ── */
+  .attest-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: var(--field-bg);
+    border: 1px solid var(--field-bd);
+    border-radius: 3px;
+    padding: 8px 10px;
+    margin-bottom: 5px;
+    cursor: pointer;
+  }
+  .attest-row input { width: 13px; height: 13px; accent-color: var(--teal); flex-shrink: 0; margin-top: 2px; cursor:pointer; border:none; padding:0; background:none; }
+  .attest-row span  { font-size: 11px; color: var(--text); line-height: 1.5; }
+  .attest-row span strong { font-weight: 700; }
+
+  /* ── SIGNATURE ── */
+  .sig-box {
+    background: var(--field-bg);
+    border: 1.5px solid var(--teal);
+    border-radius: 3px;
+    padding: 10px 12px;
+  }
+  .sig-box .sig-label {
+    font-size: 9px;
+    color: var(--foot-gray);
+    font-style: italic;
+    display: block;
+    margin-bottom: 6px;
+  }
+  .sig-box input {
+    background: transparent;
+    border: none;
+    border-bottom: 1.5px solid var(--teal);
+    border-radius: 0;
+    font-size: 15px;
+    font-style: italic;
+    width: 100%;
+    padding: 4px 0;
+    outline: none;
+  }
+
+  /* ── FOOTER ── */
+  .form-footer {
+    background: var(--navy);
+    padding: 8px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 3px solid var(--teal);
+  }
+  .form-footer span { font-size: 10px; color: var(--foot-gray); }
+  .form-footer .footer-right { color: var(--teal); }
+
+  /* ── SUBMIT BUTTON ── */
+  .submit-row {
+    text-align: center;
+    padding: 20px 0 8px;
+  }
+  .btn-submit {
+    background: var(--teal);
+    color: var(--navy);
+    border: none;
+    padding: 11px 40px;
+    font-family: 'Barlow', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    border-radius: 3px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: background 0.15s;
+    margin-right: 10px;
+  }
+  .btn-submit:hover { background: var(--teal-dim); }
+  .btn-print {
+    background: transparent;
+    color: var(--label);
+    border: 1px solid var(--field-bd);
+    padding: 10px 28px;
+    font-family: 'Barlow', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .btn-print:hover { border-color: var(--teal); color: var(--teal); }
+
+  /* ── UTILITY ── */
+  .mt-8  { margin-top: 8px; }
+  .mt-12 { margin-top: 12px; }
+  .mb-4  { margin-bottom: 4px; }
+  .sublabel {
+    font-size: 8.5px;
+    font-weight: 700;
+    color: var(--label);
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 6px;
+    margin-top: 10px;
+  }
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header-card">
+    <div class="header-badge">AI GOVERNANCE FORM v1.0 · VRC1 PLATFORM CONFIDENTIAL</div>
+    <img src="data:image/png;base64,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" alt="VANREIN COMPLIANCE" class="logo-img">
+    <div class="form-title">AI Governance Intake &<br>Scope Confirmation Form</div>
+    <div class="form-subtitle">Complete all required sections before engagement commences. Sections marked REQUIRED must be fully populated prior to engagement start.</div>
+  </div>
+
+  <div class="form-body">
+
+    <!-- ── SECTION 01 ── -->
+    <div class="section-bar">
+      <span class="section-num">SECTION 01</span>
+      <div class="section-divider"></div>
+      <span class="section-title">ENGAGEMENT OVERVIEW</span>
+      <span class="section-badge required">REQUIRED</span>
+    </div>
+
+    <div class="field-row">
+      <div>
+        <label class="field-label">CLIENT NAME <span class="req">*</span></label>
+        <input type="text" name="client_name" placeholder="">
+      </div>
+      <div>
+        <label class="field-label">ENGAGEMENT / PROJECT NAME <span class="req">*</span></label>
+        <input type="text" name="project_name" placeholder="">
+      </div>
+      <div>
+        <label class="field-label">PREPARED BY (VANREIN) <span class="req">*</span></label>
+        <input type="text" name="prepared_by" placeholder="">
+      </div>
+      <div>
+        <label class="field-label">DATE <span class="req">*</span></label>
+        <input type="date" name="date">
+      </div>
+      <div>
+        <label class="field-label">PRIMARY TECHNICAL POC (CLIENT)</label>
+        <input type="text" name="primary_poc" placeholder="">
+      </div>
+      <div>
+        <label class="field-label">COMPLIANCE / AUDIT LIAISON (CLIENT)</label>
+        <input type="text" name="audit_liaison" placeholder="">
+      </div>
+    </div>
+
+    <!-- ── SECTION 02 ── -->
+    <div class="section-bar">
+      <span class="section-num">SECTION 02</span>
+      <div class="section-divider"></div>
+      <span class="section-title">ORGANIZATION & COMPLIANCE CONTEXT</span>
+    </div>
+
+    <div class="field-row">
+      <div>
+        <label class="field-label">INDUSTRY <span class="req">*</span></label>
+        <input type="text" name="industry">
+      </div>
+      <div>
+        <label class="field-label">EMPLOYEE COUNT</label>
+        <input type="text" name="employee_count">
+      </div>
+      <div>
+        <label class="field-label">STATE OF INCORPORATION</label>
+        <input type="text" name="state_inc">
+      </div>
+    </div>
+
+    <span class="sublabel">REGULATORY REQUIREMENTS (SELECT ALL THAT APPLY)</span>
+    <div class="pill-grid-3">
+      <label class="pill"><input type="checkbox" name="reg_hipaa"> HIPAA</label>
+      <label class="pill"><input type="checkbox" name="reg_soc2"> SOC 2</label>
+      <label class="pill"><input type="checkbox" name="reg_pci"> PCI-DSS</label>
+      <label class="pill"><input type="checkbox" name="reg_iso27001"> ISO 27001</label>
+      <label class="pill"><input type="checkbox" name="reg_nist"> NIST AI RMF</label>
+      <label class="pill"><input type="checkbox" name="reg_texramp"> TexRAMP</label>
+      <label class="pill"><input type="checkbox" name="reg_euai"> EU AI Act</label>
+      <label class="pill"><input type="checkbox" name="reg_iso42001"> ISO/IEC 42001</label>
+    </div>
+    <div class="field-full mt-8">
+      <label class="field-label">OTHER REGULATORY REQUIREMENT</label>
+      <input type="text" name="other_reg">
+    </div>
+
+    <!-- ── SECTION 03 ── -->
+    <div class="section-bar">
+      <span class="section-num">SECTION 03</span>
+      <div class="section-divider"></div>
+      <span class="section-title">ENGAGEMENT OBJECTIVES</span>
+    </div>
+
+    <span class="sublabel">PRIMARY GOAL (SELECT ALL THAT APPLY)</span>
+    <div class="pill-grid">
+      <label class="pill"><input type="checkbox" name="goal_risk"> Identify AI risk exposure</label>
+      <label class="pill"><input type="checkbox" name="goal_validate"> Validate existing AI controls</label>
+      <label class="pill"><input type="checkbox" name="goal_compliance"> Meet compliance requirements</label>
+      <label class="pill"><input type="checkbox" name="goal_competitive"> Competitive differentiation</label>
+      <label class="pill"><input type="checkbox" name="goal_assurance"> Customer & enterprise assurance</label>
+      <label class="pill"><input type="checkbox" name="goal_audit"> Support audit or certification</label>
+      <label class="pill"><input type="checkbox" name="goal_incident"> Establish AI incident response</label>
+      <label class="pill"><input type="checkbox" name="goal_training"> Workforce training & policy</label>
+    </div>
+    <div class="field-full mt-8">
+      <label class="field-label">OTHER GOAL</label>
+      <input type="text" name="other_goal">
+    </div>
+    <div class="field-full">
+      <label class="field-label">SUCCESS CRITERIA</label>
+      <textarea name="success_criteria" rows="3"></textarea>
+    </div>
+
+    <!-- ── SECTION 04 ── -->
+    <div class="section-bar">
+      <span class="section-num">SECTION 04</span>
+      <div class="section-divider"></div>
+      <span class="section-title">AI SYSTEM INVENTORY</span>
+      <span class="section-badge critical">● CRITICAL</span>
+    </div>
+
+    <div class="note-box">SCOPE NOTE: Include ALL AI/ML tools regardless of deployment model — public LLMs, fine-tuned models, vendor-embedded AI, internal pipelines, and automation tools with AI components. VanRein assesses both external and internal surfaces.</div>
+
+    <span class="sublabel">PUBLIC / COMMERCIAL LLMS IN USE (SELECT ALL THAT APPLY) <span style="color:var(--red)">*</span></span>
+    <div class="pill-grid">
+      <label class="pill"><input type="checkbox" name="llm_openai"> OpenAI GPT-5 / GPT-4o (API or Azure OpenAI)</label>
+      <label class="pill"><input type="checkbox" name="llm_anthropic"> Anthropic Claude 4 (Opus / Sonnet / API or Bedrock)</label>
+      <label class="pill"><input type="checkbox" name="llm_gemini"> Google Gemini 2.5 Pro / Flash (Vertex AI or API)</label>
+      <label class="pill"><input type="checkbox" name="llm_meta"> Meta Llama 4 (via Bedrock, Azure, or self-hosted)</label>
+      <label class="pill"><input type="checkbox" name="llm_mistral"> Mistral Large 2 / Le Chat (API or Azure)</label>
+      <label class="pill"><input type="checkbox" name="llm_grok"> xAI Grok 3 (API or X Premium)</label>
+      <label class="pill"><input type="checkbox" name="llm_copilot"> Microsoft Copilot / Copilot 365 (Enterprise)</label>
+      <label class="pill"><input type="checkbox" name="llm_bedrock"> AWS Bedrock (Nova, Titan, Llama, Mistral)</label>
+      <label class="pill"><input type="checkbox" name="llm_ambient"> Ambient AI / Scribes (Nuance DAX, Suki, Abridge)</label>
+      <label class="pill"><input type="checkbox" name="llm_chatgpt"> ChatGPT (Employee browser / ChatGPT Team)</label>
+      <label class="pill"><input type="checkbox" name="llm_rpa"> Automation / RPA w/ AI (UiPath, Power Automate, etc.)</label>
+      <label class="pill"><input type="checkbox" name="llm_other"> Other / Custom or Fine-tuned LLM</label>
+    </div>
+    <div class="field-full mt-8">
+      <label class="field-label">SPECIFY OTHER AI VENDORS / MODELS</label>
+      <input type="text" name="other_llm">
+    </div>
+
+    <span class="sublabel">INTERNAL AI / ML MODELS OR PIPELINES</span>
+    <div class="pill-grid">
+      <label class="pill"><input type="checkbox" name="int_nlp"> Custom-trained NLP / ASR</label>
+      <label class="pill"><input type="checkbox" name="int_sent"> Sentiment / intent scoring</label>
+      <label class="pill"><input type="checkbox" name="int_cds"> Clinical decision support</label>
+      <label class="pill"><input type="checkbox" name="int_pii"> Data classification / PII detection</label>
+      <label class="pill"><input type="checkbox" name="int_rec"> Recommendation engine</label>
+      <label class="pill"><input type="checkbox" name="int_none"> None — vendor models only</label>
+    </div>
+
+    <span class="sublabel">AI OUTPUTS USED FOR CONSEQUENTIAL DECISIONS? <span style="color:var(--red)">*</span></span>
+    <div class="pill-grid-3">
+      <label class="pill"><input type="radio" name="consequential" value="yes"> Yes</label>
+      <label class="pill"><input type="radio" name="consequential" value="no"> No</label>
+      <label class="pill"><input type="radio" name="consequential" value="partial"> Partial / In review</label>
+    </div>
+
+    <span class="sublabel">CUSTOMERS INFORMED AI IS IN USE? <span style="color:var(--red)">*</span></span>
+    <div class="pill-grid-3">
+      <label class="pill"><input type="radio" name="cust_informed" value="yes"> Yes</label>
+      <label class="pill"><input type="radio" name="cust_informed" value="no"> No</label>
+      <label class="pill"><input type="radio" name="cust_informed" value="planned"> Planned</label>
+    </div>
+
+    <div class="field-full mt-8">
+      <label class="field-label">DESCRIBE PRIMARY AI USE CASES <span class="req">*</span></label>
+      <textarea name="ai_use_cases" rows="3"></textarea>
+    </div>
+
+    <!-- ── SECTION 05 ── -->
+    <div class="section-bar">
+      <span class="section-num">SECTION 05</span>
+      <div class="section-divider"></div>
+      <span class="section-title">DATA HANDLING & ARCHITECTURE</span>
+      <span class="section-badge critical">● CRITICAL</span>
+    </div>
+
+    <span class="sublabel">DATA CATEGORIES PROCESSED <span style="color:var(--red)">*</span></span>
+    <div class="pill-grid-3">
+      <label class="pill"><input type="checkbox" name="dat_phi"> PHI / Medical Records</label>
+      <label class="pill"><input type="checkbox" name="dat_pii"> PII (Names, Contacts)</label>
+      <label class="pill"><input type="checkbox" name="dat_audio"> Call Audio / Recordings</label>
+      <label class="pill"><input type="checkbox" name="dat_trans"> Call Transcripts</label>
+      <label class="pill"><input type="checkbox" name="dat_fin"> Financial / Payment Data</label>
+      <label class="pill"><input type="checkbox" name="dat_crm"> CRM / Business Records</label>
+      <label class="pill"><input type="checkbox" name="dat_bio"> Biometric Data</label>
+      <label class="pill"><input type="checkbox" name="dat_meta"> Metadata / Usage Logs</label>
+      <label class="pill"><input type="checkbox" name="dat_govid"> Government ID / SSN</label>
+    </div>
+
+    <span class="sublabel">TRANSPORT & NETWORK CONTROLS IN USE <span style="color:var(--red)">*</span></span>
+    <div class="pill-grid-3">
+      <label class="pill"><input type="checkbox" name="net_tls"> TLS / SSL (HTTPS)</label>
+      <label class="pill"><input type="checkbox" name="net_rest"> REST APIs</label>
+      <label class="pill"><input type="checkbox" name="net_sftp"> SFTP</label>
+      <label class="pill"><input type="checkbox" name="net_vlan"> VLANs</label>
+      <label class="pill"><input type="checkbox" name="net_vpn"> VPN</label>
+      <label class="pill"><input type="checkbox" name="net_mtls"> mTLS / Zero Trust</label>
+    </div>
+
+    <span class="sublabel">DATA SENT TO THIRD-PARTY AI VENDORS? <span style="color:var(--red)">*</span></span>
+    <div class="pill-grid-3">
+      <label class="pill"><input type="radio" name="data_vendors" value="yes"> Yes</label>
+      <label class="pill"><input type="radio" name="data_vendors" value="no"> No</label>
+      <label class="pill"><input type="radio" name="data_vendors" value="partial"> Partially / Some vendors</label>
+    </div>
+
+    <div class="field-row mt-8">
+      <div>
+        <label class="field-label">DATA MASKING / OBFUSCATION CONTROLS</label>
+        <input type="text" name="data_masking">
+      </div>
+      <div>
+        <label class="field-label">THIRD-PARTY AI VENDORS / DATA PROCESSORS</label>
+        <input type="text" name="third_party_vendors">
+      </div>
+    </div>
+
+    <span class="sublabel">NETWORK DIAGRAM AVAILABLE?</span>
+    <div class="pill-grid-3">
+      <label class="pill"><input type="radio" name="net_diag" value="yes"> Yes</label>
+      <label class="pill"><input type="radio" name="net_diag" value="no"> No</label>
+      <label class="pill"><input type="radio" name="net_diag" value="pending"> In Progress</label>
+    </div>
+
+    <span class="sublabel">DATA FLOW DIAGRAMS AVAILABLE?</span>
+    <div class="pill-grid-3">
+      <label class="pill"><input type="radio" name="data_flow" value="yes"> Yes</label>
+      <label class="pill"><input type="radio" name="data_flow" value="no"> No</label>
+      <label class="pill"><input type="radio" name="data_flow" value="pending"> In Progress</label>
+    </div>
+
+    <!-- ── SECTION 06 ── -->
+    <div class="section-bar">
+      <span class="section-num">SECTION 06</span>
+      <div class="section-divider"></div>
+      <span class="section-title">RISK POSTURE & CURRENT GOVERNANCE</span>
+    </div>
+
+    <span class="sublabel">CURRENT AI GOVERNANCE MATURITY <span style="color:var(--red)">*</span></span>
+    <label class="maturity-pill"><input type="radio" name="gov_maturity" value="adhoc"><div class="maturity-label"><strong>Ad hoc</strong><span>No formal governance — AI in use with no policy, controls, or documentation</span></div></label>
+    <label class="maturity-pill"><input type="radio" name="gov_maturity" value="dev"><div class="maturity-label"><strong>Developing</strong><span>Basic policies exist — some acceptable use policies; limited controls or inventory</span></div></label>
+    <label class="maturity-pill"><input type="radio" name="gov_maturity" value="defined"><div class="maturity-label"><strong>Defined</strong><span>Documented AI governance program — risk assessments, inventories, and vendor reviews in place</span></div></label>
+    <label class="maturity-pill"><input type="radio" name="gov_maturity" value="managed"><div class="maturity-label"><strong>Managed</strong><span>Evidence-based assurance — ongoing monitoring, audit logs, training, incident response</span></div></label>
+
+    <span class="sublabel">KNOWN RISK CONCERNS (SELECT ALL THAT APPLY)</span>
+    <div class="pill-grid">
+      <label class="pill"><input type="checkbox" name="risk_inject"> Prompt injection / adversarial input</label>
+      <label class="pill"><input type="checkbox" name="risk_leak"> PII / PHI leakage to public models</label>
+      <label class="pill"><input type="checkbox" name="risk_halluc"> Hallucination / output accuracy</label>
+      <label class="pill"><input type="checkbox" name="risk_bias"> Model bias / disparate impact</label>
+      <label class="pill"><input type="checkbox" name="risk_no_ir"> No AI incident response process</label>
+      <label class="pill"><input type="checkbox" name="risk_no_inv"> Lack of AI usage inventory</label>
+      <label class="pill"><input type="checkbox" name="risk_vendor"> Vendor contractual gaps (DPA, BAA)</label>
+      <label class="pill"><input type="checkbox" name="risk_noncomp"> Regulatory non-compliance</label>
+    </div>
+
+    <span class="sublabel">GOVERNANCE CONFIDENCE RATING (1 = NOT CONFIDENT, 5 = VERY CONFIDENT)</span>
+    <div class="confidence-row">
+      <label class="conf-pill"><input type="radio" name="gov_conf" value="1"><span>1</span><span class="conf-sub">Not Confident</span></label>
+      <label class="conf-pill"><input type="radio" name="gov_conf" value="2"><span>2</span></label>
+      <label class="conf-pill"><input type="radio" name="gov_conf" value="3"><span>3</span></label>
+      <label class="conf-pill"><input type="radio" name="gov_conf" value="4"><span>4</span></label>
+      <label class="conf-pill"><input type="radio" name="gov_conf" value="5"><span>5</span><span class="conf-sub">Very Confident</span></label>
+    </div>
+
+    <div class="field-row mt-8">
+      <div>
+        <label class="field-label">PRIOR AI / SECURITY ASSESSMENT?</label>
+        <input type="text" name="prior_assess" placeholder="Firm name / date if applicable">
+      </div>
+      <div>
+        <label class="field-label">PENETRATION TESTING DESIRED? <span class="req">*</span></label>
+        <div class="pill-grid" style="margin-top:4px">
+          <label class="pill"><input type="radio" name="pentest" value="yes"> Yes</label>
+          <label class="pill"><input type="radio" name="pentest" value="no"> No</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="field-full">
+      <label class="field-label">CRITICAL SYSTEMS / AI FUNCTIONS THAT MUST NOT BE DISRUPTED</label>
+      <input type="text" name="critical_sys">
+    </div>
+
+    <span class="sublabel">PRIMARY DRIVERS FOR PURSUING AI GOVERNANCE (SELECT ALL THAT APPLY)</span>
+    <div class="pill-grid">
+      <label class="pill"><input type="checkbox" name="drv_competitive"> Competitive differentiation</label>
+      <label class="pill"><input type="checkbox" name="drv_customer"> Customer reassurance / trust</label>
+      <label class="pill"><input type="checkbox" name="drv_enterprise"> Enterprise sales requirements</label>
+      <label class="pill"><input type="checkbox" name="drv_regulatory"> Regulatory compliance</label>
+      <label class="pill"><input type="checkbox" name="drv_partner"> Partner / vendor requirements</label>
+      <label class="pill"><input type="checkbox" name="drv_board"> Board / investor mandate</label>
+    </div>
+
+    <!-- ── SECTION 07 ── -->
+    <div class="section-bar">
+      <span class="section-num">SECTION 07</span>
+      <div class="section-divider"></div>
+      <span class="section-title">PROGRAM SELECTION & PRICING</span>
+      <span class="section-badge required">REQUIRED</span>
+    </div>
+
+    <div class="loyalty-banner">
+      <strong>★ PREFERRED CLIENT PRICING — 10% LOYALTY ADJUSTMENT APPLIED</strong>
+      <span>As a long-term client, we've applied preferred pricing to extend your compliance program into AI Governance without increasing complexity. Discounted rates are reflected below.</span>
+    </div>
+
+    <span class="sublabel">SELECT PROGRAM OPTION <span style="color:var(--red)">*</span></span>
+
+    <!-- Option 01 -->
+    <label class="price-card" onclick="">
+      <div>
+        <div class="price-card-header">
+          <span class="option-badge">OPTION 01</span>
+          <span class="card-title">AI Risk Snapshot</span>
+        </div>
+        <div class="price-tagline">Quick clarity. Immediate visibility.</div>
+        <div class="price-row">
+          <span class="price-amount">$13,950</span>
+          <span class="price-was">$15,500</span>
+          <span class="price-discount">10% discount</span>
+        </div>
+        <div class="price-monthly">or $1,165/month × 12 months</div>
+        <ul class="feature-list">
+          <li>Targeted AI Risk Review</li>
+          <li>AI Usage Discovery (High-Level)</li>
+          <li>PHI Exposure &amp; Data Risk Check</li>
+          <li>Key Vendor Review (Sample-Based)</li>
+          <li>HIPAA-Aligned Risk Insights</li>
+          <li class="best-for">★ Best For: Organizations starting to explore AI risk</li>
+        </ul>
+      </div>
+      <div class="card-radio"><input type="radio" name="program_option" value="opt1"></div>
+    </label>
+
+    <!-- Option 02 -->
+    <label class="price-card recommended" onclick="">
+      <div>
+        <div class="price-card-header">
+          <span class="option-badge">OPTION 02</span>
+          <span class="card-title">AI Governance Assessment</span>
+          <span class="rec-badge">★ RECOMMENDED</span>
+        </div>
+        <div class="price-tagline">Structured insight. Defined risk posture.</div>
+        <div class="price-row">
+          <span class="price-amount">$22,500</span>
+          <span class="price-was">$25,000</span>
+          <span class="price-discount">10% discount</span>
+        </div>
+        <div class="price-monthly">or $1,875/month × 12 months</div>
+        <ul class="feature-list">
+          <li>Comprehensive AI Inventory &amp; Usage Mapping</li>
+          <li>Full AI Risk Assessment (Data, Models, Usage)</li>
+          <li>Data Flow &amp; PHI Exposure Analysis</li>
+          <li>Vendor Security &amp; Compliance Review</li>
+          <li>AI Risk Register (Included)</li>
+          <li>Policy Gap Analysis</li>
+          <li>NIST AI RMF + HIPAA Control Mapping</li>
+          <li>Usage &amp; Prompt Risk Evaluation</li>
+          <li class="best-for">★ Best For: Organizations actively using AI without formal governance</li>
+        </ul>
+      </div>
+      <div class="card-radio"><input type="radio" name="program_option" value="opt2"></div>
+    </label>
+
+    <!-- Option 03 -->
+    <label class="price-card" onclick="">
+      <div>
+        <div class="price-card-header">
+          <span class="option-badge">OPTION 03</span>
+          <span class="card-title">AI Governance Program</span>
+        </div>
+        <div class="price-tagline">Full governance. Built to scale.</div>
+        <div class="price-row">
+          <span class="price-amount">$45,000</span>
+          <span class="price-was">$50,000</span>
+          <span class="price-discount">10% discount</span>
+        </div>
+        <div class="price-monthly">or $3,750/month × 12 months</div>
+        <ul class="feature-list">
+          <li>Enterprise AI Inventory + Risk Classification Model</li>
+          <li>AI Governance Framework Development</li>
+          <li>Data Protection Controls + Governance Integration</li>
+          <li>Vendor Governance + Approval Framework</li>
+          <li>AI Acceptable Use Policy (Draft Included)</li>
+          <li>Security Architecture &amp; Control Design</li>
+          <li>AI Risk Register (Integrated)</li>
+          <li>Workforce AI Usage Framework &amp; Training</li>
+          <li>Phased Implementation Roadmap (6–12 Months)</li>
+          <li>Executive Advisory &amp; Ongoing Governance Support</li>
+          <li class="best-for">★ Best For: Enterprise-scale programs, built to scale</li>
+        </ul>
+      </div>
+      <div class="card-radio"><input type="radio" name="program_option" value="opt3"></div>
+    </label>
+
+    <span class="sublabel">PREFERRED PAYMENT STRUCTURE <span style="color:var(--red)">*</span></span>
+    <div class="pill-grid-3">
+      <label class="pill"><input type="radio" name="payment" value="annual"> Annual (single payment)</label>
+      <label class="pill"><input type="radio" name="payment" value="monthly"> Monthly (12-month term)</label>
+      <label class="pill"><input type="radio" name="payment" value="discuss"> Discuss with Bennie</label>
+    </div>
+
+    <span class="sublabel">TIMELINE TO BEGIN ENGAGEMENT <span style="color:var(--red)">*</span></span>
+    <div class="pill-grid-3">
+      <label class="pill"><input type="radio" name="timeline" value="asap"> As soon as possible</label>
+      <label class="pill"><input type="radio" name="timeline" value="30d"> Within 30 days</label>
+      <label class="pill"><input type="radio" name="timeline" value="60d"> Within 60 days</label>
+    </div>
+
+    <div class="field-full mt-8">
+      <label class="field-label">ADDITIONAL CONTEXT OR SCOPE NOTES</label>
+      <textarea name="scope_notes" rows="3"></textarea>
+    </div>
+
+    <!-- ── SECTION 08 ── -->
+    <div class="section-bar">
+      <span class="section-num">SECTION 08</span>
+      <div class="section-divider"></div>
+      <span class="section-title">INCLUDED SERVICE COMPONENTS</span>
+    </div>
+
+    <div class="note-box" style="font-style:normal; color: var(--navy);">
+      <strong style="display:block; margin-bottom:4px; color:var(--teal);">VRC1 AI Governance Platform Solutions</strong>
+      VRC1 AI Governance Platform Solutions extends your existing HIPAA compliance foundation into the rapidly evolving AI landscape — ensuring that how AI is used across your organization is secure, controlled, and aligned with regulatory expectations. Rather than introducing a separate program, VRC1 integrates AI governance directly into your current compliance framework, providing visibility into AI usage, managing risk exposure, and establishing governance aligned with regulatory expectations.
+    </div>
+
+    <div class="svc-row"><span class="svc-num">01</span><div class="svc-content"><strong>AI Risk Assessment & Use Case Inventory</strong><span>Identifies where AI is used across your organization and evaluates risk exposure (data input, output reliability, vendor risk). This is not a separate compliance program — it's an extension of your existing HIPAA foundation, designed to govern how AI interacts with sensitive data, workflows, and decision-making across your organization.</span></div></div>
+    <div class="svc-row"><span class="svc-num">02</span><div class="svc-content"><strong>AI Governance Policies & Acceptable Use Framework</strong><span>Defines how AI can and cannot be used across teams, including PHI handling, prompt guidance, and data restrictions.</span></div></div>
+    <div class="svc-row"><span class="svc-num">03</span><div class="svc-content"><strong>AI Risk Register & Ongoing Risk Tracking</strong><span>Centralized register of AI-related risks with scoring, ownership, and mitigation tracking inside VRC1.</span></div></div>
+    <div class="svc-row"><span class="svc-num">04</span><div class="svc-content"><strong>AI Vendor Security Review</strong><span>Documentation of third-party AI tools (e.g., ChatGPT, ambient scribes, automation tools) to ensure proper data handling and contractual safeguards aligned with HIPAA and AI governance requirements.</span></div></div>
+    <div class="svc-row"><span class="svc-num">05</span><div class="svc-content"><strong>Workforce AI Training & Certification</strong><span>Practical training for staff on safe AI usage, prompt hygiene, and compliance alignment — aligned with HIPAA and emerging AI regulations.</span></div></div>
+    <div class="svc-row"><span class="svc-num">06</span><div class="svc-content"><strong>AI Output Validation & Human Oversight Controls</strong><span>Establishes guardrails to reduce hallucinations, ensure accuracy, and maintain human-in-the-loop review where required.</span></div></div>
+    <div class="svc-row"><span class="svc-num">07</span><div class="svc-content"><strong>Incident Response & AI Misuse Protocols</strong><span>Defines procedures for AI-related incidents including data exposure, incorrect outputs, or unauthorized use.</span></div></div>
+    <div class="svc-row"><span class="svc-num">08</span><div class="svc-content"><strong>AI Governance Meetings & Advisory</strong><span>Ongoing guidance to adapt policies and controls as AI tools and regulations evolve.</span></div></div>
+    <div class="svc-row"><span class="svc-num">09</span><div class="svc-content"><strong>Dedicated AI Compliance Support Team</strong><span>Direct access to VanRein experts for real-time questions, tool reviews, and implementation support.</span></div></div>
+
+    <!-- ── SECTION 09 ── -->
+    <div class="section-bar">
+      <span class="section-num">SECTION 09</span>
+      <div class="section-divider"></div>
+      <span class="section-title">COMPLIANCE & CERTIFICATION TARGETS</span>
+    </div>
+
+    <span class="sublabel">CERTIFICATION / FRAMEWORK TARGETS <span style="color:var(--red)">*</span></span>
+    <div class="pill-grid">
+      <label class="pill"><input type="checkbox" name="cert_soc2t1"> SOC 2 Type 1 — Point-in-time</label>
+      <label class="pill"><input type="checkbox" name="cert_soc2t2"> SOC 2 Type 2 — 12-month evidence</label>
+      <label class="pill"><input type="checkbox" name="cert_tex"> TexRAMP — Texas state cloud security</label>
+      <label class="pill"><input type="checkbox" name="cert_seal"> AI Governance Rating / Seal</label>
+      <label class="pill"><input type="checkbox" name="cert_iso42"> ISO/IEC 42001 — AI Management System</label>
+      <label class="pill"><input type="checkbox" name="cert_nist"> NIST AI RMF Conformance</label>
+      <label class="pill"><input type="checkbox" name="cert_hipaa"> HIPAA (if PHI in scope)</label>
+      <label class="pill"><input type="checkbox" name="cert_fed"> FedRAMP / StateRAMP</label>
+    </div>
+
+    <div class="field-row mt-8">
+      <div>
+        <label class="field-label">TARGET CERTIFICATION DATE</label>
+        <input type="date" name="cert_date">
+      </div>
+      <div>
+        <label class="field-label">PREFERRED CPA FIRM (SOC 2)</label>
+        <input type="text" name="cpa_firm">
+      </div>
+    </div>
+    <div class="field-full">
+      <label class="field-label">CERTIFICATION NOTES / CONSTRAINTS</label>
+      <textarea name="cert_notes" rows="2"></textarea>
+    </div>
+
+    <!-- ── SECTION 10 ── -->
+    <div class="section-bar">
+      <span class="section-num">SECTION 10</span>
+      <div class="section-divider"></div>
+      <span class="section-title">REPORTING & DELIVERABLES</span>
+    </div>
+
+    <span class="sublabel">REPORTS REQUIRED</span>
+    <div class="pill-grid-3">
+      <label class="pill"><input type="radio" name="reports" value="exec"> Executive Summary</label>
+      <label class="pill"><input type="radio" name="reports" value="tech"> Technical Report</label>
+      <label class="pill"><input type="radio" name="reports" value="both"> Both</label>
+    </div>
+
+    <span class="sublabel">REMEDIATION TRACKING REQUIRED?</span>
+    <div class="pill-grid-3">
+      <label class="pill"><input type="radio" name="remediation" value="vrc1"> Yes — in VRC1</label>
+      <label class="pill"><input type="radio" name="remediation" value="no"> No — report only</label>
+    </div>
+
+    <span class="sublabel">FRAMEWORK ALIGNMENT</span>
+    <div class="pill-grid-3">
+      <label class="pill"><input type="checkbox" name="fw_nist"> NIST AI RMF</label>
+      <label class="pill"><input type="checkbox" name="fw_iso42"> ISO/IEC 42001</label>
+      <label class="pill"><input type="checkbox" name="fw_hipaa"> HIPAA Security Rule</label>
+      <label class="pill"><input type="checkbox" name="fw_csf"> NIST CSF 2.0</label>
+      <label class="pill"><input type="checkbox" name="fw_cis"> CIS Controls</label>
+      <label class="pill"><input type="checkbox" name="fw_owasp"> OWASP LLM Top 10</label>
+    </div>
+
+    <!-- ── SECTION 11 ── -->
+    <div class="section-bar">
+      <span class="section-num">SECTION 11</span>
+      <div class="section-divider"></div>
+      <span class="section-title">POINT OF CONTACT & ESCALATION</span>
+      <span class="section-badge required">REQUIRED</span>
+    </div>
+
+    <div class="field-row">
+      <div>
+        <label class="field-label">PRIMARY TECHNICAL CONTACT <span class="req">*</span></label>
+        <input type="text" name="poc_name">
+      </div>
+      <div>
+        <label class="field-label">EMAIL <span class="req">*</span></label>
+        <input type="email" name="poc_email">
+      </div>
+      <div>
+        <label class="field-label">PHONE</label>
+        <input type="tel" name="poc_phone">
+      </div>
+      <div>
+        <label class="field-label">SECONDARY / ESCALATION CONTACT</label>
+        <input type="text" name="poc_secondary">
+      </div>
+    </div>
+
+    <!-- ── SECTION 12 ── -->
+    <div class="section-bar">
+      <span class="section-num">SECTION 12</span>
+      <div class="section-divider"></div>
+      <span class="section-title">LEGAL & FINAL AUTHORIZATION</span>
+      <span class="section-badge required">REQUIRED</span>
+    </div>
+
+    <div class="note-box">LEGAL NOTE: Written authorization will be finalized prior to engagement start. All activities are governed by the VanRein Compliance Master Services Agreement and applicable confidentiality terms.</div>
+
+    <span class="sublabel">ATTESTATIONS <span style="color:var(--red)">*</span></span>
+    <label class="attest-row"><input type="checkbox" name="attest_acc"><span><strong>ACCURACY:</strong> I attest that all information provided is accurate and complete to the best of my knowledge.</span></label>
+    <label class="attest-row"><input type="checkbox" name="attest_auth"><span><strong>AUTHORIZATION:</strong> I am authorized to initiate this engagement and grant access to systems described herein.</span></label>
+    <label class="attest-row"><input type="checkbox" name="attest_data"><span><strong>DATA HANDLING:</strong> I understand all information is treated as confidential and used exclusively for this engagement.</span></label>
+    <label class="attest-row"><input type="checkbox" name="attest_nda"><span><strong>NDA IN PLACE:</strong> A Non-Disclosure Agreement is already executed between the parties. (Check if applicable.)</span></label>
+
+    <div class="field-row mt-8">
+      <div>
+        <label class="field-label">AUTHORIZED SIGNATORY NAME <span class="req">*</span></label>
+        <input type="text" name="sig_name">
+      </div>
+      <div>
+        <label class="field-label">TITLE / AUTHORITY <span class="req">*</span></label>
+        <input type="text" name="sig_title">
+      </div>
+      <div>
+        <label class="field-label">COMPANY <span class="req">*</span></label>
+        <input type="text" name="sig_company">
+      </div>
+      <div>
+        <label class="field-label">DATE <span class="req">*</span></label>
+        <input type="date" name="sig_date">
+      </div>
+    </div>
+
+    <div class="field-full">
+      <label class="field-label">SIGNATURE</label>
+      <div class="sig-box">
+        <span class="sig-label">SIGNATURE / ELECTRONIC ACKNOWLEDGEMENT</span>
+        <input type="text" name="signature" placeholder="Type full name to sign electronically">
+      </div>
+    </div>
+
+    <!-- ── SECTION 13 ── -->
+    <div class="section-bar">
+      <span class="section-num">SECTION 13</span>
+      <div class="section-divider"></div>
+      <span class="section-title">ADDITIONAL NOTES</span>
+    </div>
+
+    <div class="field-full">
+      <label class="field-label">NOTES, SPECIAL INSTRUCTIONS, VENDOR CONSTRAINTS, OR ENGAGEMENT-SPECIFIC ADDENDA</label>
+      <textarea name="notes" rows="6"></textarea>
+    </div>
+
+    <!-- SUBMIT -->
+    <div class="submit-row">
+      <button type="button" class="btn-submit" onclick="handleSubmit()">Submit Intake Form</button>
+      <button type="button" class="btn-print" onclick="window.print()">Print / Save PDF</button>
+    </div>
+
+  </div><!-- /form-body -->
+
+  <!-- FOOTER -->
+  <div class="form-footer">
+    <span>VanRein Compliance — Confidential & Proprietary</span>
+    <span class="footer-right">AI Governance Intake Form v1.0</span>
+  </div>
+
+</div><!-- /page -->
+</div><!-- /wrapper -->
+
+<script>
+// ── helpers ───────────────────────────────────────────────────────────────────
+function val(name) {
+  const el = document.querySelector(`[name="${name}"]`);
+  return el ? el.value.trim() : '';
+}
+function checked(name) {
+  const el = document.querySelector(`[name="${name}"]`);
+  return el ? el.checked : false;
+}
+function radioVal(name) {
+  const el = document.querySelector(`[name="${name}"]:checked`);
+  return el ? el.value : 'Not selected';
+}
+function checkboxVals(names) {
+  return names.filter(n => {
+    const el = document.querySelector(`[name="${n}"]`);
+    return el && el.checked;
+  }).map(n => {
+    const el = document.querySelector(`[name="${n}"]`);
+    return el ? el.closest('label')?.textContent?.trim() : n;
+  }).join(', ') || 'None selected';
+}
+
+// ── validation ────────────────────────────────────────────────────────────────
+function handleSubmit() {
+  const required = [
+    ['client_name',  'Client Name'],
+    ['project_name', 'Engagement / Project Name'],
+    ['prepared_by',  'Prepared By'],
+    ['date',         'Date'],
+    ['sig_name',     'Authorized Signatory Name'],
+    ['sig_title',    'Title / Authority'],
+    ['sig_company',  'Company'],
+    ['sig_date',     'Signature Date'],
+    ['signature',    'Signature'],
+  ];
+  const missing = required.filter(([n]) => !val(n));
+  if (missing.length) {
+    alert('Please complete the following required fields:\n\n' + missing.map(([,l]) => '• ' + l).join('\n'));
+    return;
+  }
+  if (!['attest_acc','attest_auth','attest_data'].every(n => checked(n))) {
+    alert('Please acknowledge all required attestations in Section 12.');
+    return;
+  }
+  if (!document.querySelector('[name="program_option"]:checked')) {
+    alert('Please select a program option in Section 7.');
+    return;
+  }
+
+  // ── build email body ───────────────────────────────────────────────────────
+  const program = document.querySelector('[name="program_option"]:checked');
+  const programLabel = program ? program.closest('label')?.querySelector('.card-title')?.textContent?.trim() : 'Not selected';
+
+  const lines = [
+    '=== VANREIN COMPLIANCE — AI GOVERNANCE INTAKE FORM ===',
+    '',
+    '── SECTION 01: ENGAGEMENT OVERVIEW ─────────────────',
+    `Client Name:              ${val('client_name')}`,
+    `Engagement / Project:     ${val('project_name')}`,
+    `Prepared By:              ${val('prepared_by')}`,
+    `Date:                     ${val('date')}`,
+    `Primary Technical POC:    ${val('primary_poc') || 'N/A'}`,
+    `Audit Liaison:            ${val('audit_liaison') || 'N/A'}`,
+    '',
+    '── SECTION 02: ORGANIZATION & COMPLIANCE CONTEXT ───',
+    `Industry:                 ${val('industry')}`,
+    `Employee Count:           ${val('employee_count') || 'N/A'}`,
+    `State of Incorporation:   ${val('state_inc') || 'N/A'}`,
+    `Regulatory Requirements:  ${checkboxVals(['reg_hipaa','reg_soc2','reg_pci','reg_iso27001','reg_nist','reg_texramp','reg_euai','reg_iso42001'])}`,
+    `Other Regulatory:         ${val('other_reg') || 'N/A'}`,
+    '',
+    '── SECTION 03: ENGAGEMENT OBJECTIVES ───────────────',
+    `Primary Goals:            ${checkboxVals(['goal_risk','goal_validate','goal_compliance','goal_competitive','goal_assurance','goal_audit','goal_incident','goal_training'])}`,
+    `Other Goal:               ${val('other_goal') || 'N/A'}`,
+    `Success Criteria:         ${val('success_criteria') || 'N/A'}`,
+    '',
+    '── SECTION 04: AI SYSTEM INVENTORY ─────────────────',
+    `LLMs in Use:              ${checkboxVals(['llm_openai','llm_anthropic','llm_gemini','llm_meta','llm_mistral','llm_grok','llm_copilot','llm_bedrock','llm_ambient','llm_chatgpt','llm_rpa','llm_other'])}`,
+    `Other LLM Vendors:        ${val('other_llm') || 'N/A'}`,
+    `Internal AI / ML:         ${checkboxVals(['int_nlp','int_sent','int_cds','int_pii','int_rec','int_none'])}`,
+    `Consequential Decisions:  ${radioVal('consequential')}`,
+    `Customers Informed:       ${radioVal('cust_informed')}`,
+    `Primary AI Use Cases:     ${val('ai_use_cases') || 'N/A'}`,
+    '',
+    '── SECTION 05: DATA HANDLING & ARCHITECTURE ────────',
+    `Data Categories:          ${checkboxVals(['dat_phi','dat_pii','dat_audio','dat_trans','dat_fin','dat_crm','dat_bio','dat_meta','dat_govid'])}`,
+    `Network Controls:         ${checkboxVals(['net_tls','net_rest','net_sftp','net_vlan','net_vpn','net_mtls'])}`,
+    `Data to Third-Party AI:   ${radioVal('data_vendors')}`,
+    `Data Masking Controls:    ${val('data_masking') || 'N/A'}`,
+    `Third-Party Vendors:      ${val('third_party_vendors') || 'N/A'}`,
+    `Network Diagram:          ${radioVal('net_diag')}`,
+    `Data Flow Diagrams:       ${radioVal('data_flow')}`,
+    '',
+    '── SECTION 06: RISK POSTURE & GOVERNANCE ────────────',
+    `Governance Maturity:      ${radioVal('gov_maturity')}`,
+    `Known Risk Concerns:      ${checkboxVals(['risk_inject','risk_leak','risk_halluc','risk_bias','risk_no_ir','risk_no_inv','risk_vendor','risk_noncomp'])}`,
+    `Confidence Rating (1-5):  ${radioVal('gov_conf')}`,
+    `Prior Assessment:         ${val('prior_assess') || 'N/A'}`,
+    `Pentest Desired:          ${radioVal('pentest')}`,
+    `Critical Systems:         ${val('critical_sys') || 'N/A'}`,
+    `Primary Drivers:          ${checkboxVals(['drv_competitive','drv_customer','drv_enterprise','drv_regulatory','drv_partner','drv_board'])}`,
+    '',
+    '── SECTION 07: PROGRAM SELECTION & PRICING ──────────',
+    `Selected Program:         ${programLabel}`,
+    `Payment Structure:        ${radioVal('payment')}`,
+    `Timeline to Begin:        ${radioVal('timeline')}`,
+    `Scope Notes:              ${val('scope_notes') || 'N/A'}`,
+    '',
+    '── SECTION 09: CERTIFICATION TARGETS ───────────────',
+    `Targets:                  ${checkboxVals(['cert_soc2t1','cert_soc2t2','cert_tex','cert_seal','cert_iso42','cert_nist','cert_hipaa','cert_fed'])}`,
+    `Target Date:              ${val('cert_date') || 'N/A'}`,
+    `Preferred CPA Firm:       ${val('cpa_firm') || 'N/A'}`,
+    `Certification Notes:      ${val('cert_notes') || 'N/A'}`,
+    '',
+    '── SECTION 10: REPORTING & DELIVERABLES ─────────────',
+    `Reports Required:         ${radioVal('reports')}`,
+    `Remediation Tracking:     ${radioVal('remediation')}`,
+    `Framework Alignment:      ${checkboxVals(['fw_nist','fw_iso42','fw_hipaa','fw_csf','fw_cis','fw_owasp'])}`,
+    '',
+    '── SECTION 11: POINT OF CONTACT ─────────────────────',
+    `Primary Contact:          ${val('poc_name')}`,
+    `Email:                    ${val('poc_email')}`,
+    `Phone:                    ${val('poc_phone') || 'N/A'}`,
+    `Secondary Contact:        ${val('poc_secondary') || 'N/A'}`,
+    '',
+    '── SECTION 12: AUTHORIZATION ───────────────────────',
+    `Signatory Name:           ${val('sig_name')}`,
+    `Title / Authority:        ${val('sig_title')}`,
+    `Company:                  ${val('sig_company')}`,
+    `Date:                     ${val('sig_date')}`,
+    `Electronic Signature:     ${val('signature')}`,
+    `Attestations:             Accuracy ✓  Authorization ✓  Data Handling ✓`,
+    `NDA in Place:             ${checked('attest_nda') ? 'Yes' : 'Not indicated'}`,
+    '',
+    '── SECTION 13: ADDITIONAL NOTES ────────────────────',
+    val('notes') || 'None',
+    '',
+    '═══════════════════════════════════════════════════',
+    'Submitted via VanRein Compliance AI Governance Intake Form v1.0',
+  ];
+
+  const subject = encodeURIComponent(
+    `AI Governance Intake — ${val('client_name')} — ${val('date')}`
+  );
+  const body = encodeURIComponent(lines.join('\n'));
+  const to   = 'Bennie@vanreincompliance.com,dawn@vanreincompliance.com,hello@vanreincompliance.com';
+
+  // Open default mail client with all data pre-filled
+  window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
+
+  // Show confirmation after slight delay
+  setTimeout(() => {
+    document.querySelector('.submit-row').innerHTML = `
+      <div style="
+        background: #EBF5FB;
+        border: 1.5px solid var(--teal);
+        border-radius: 4px;
+        padding: 20px 28px;
+        text-align: center;
+      ">
+        <div style="font-size:28px; margin-bottom:10px;">✓</div>
+        <div style="font-size:15px; font-weight:700; color:var(--navy); margin-bottom:6px;">
+          Intake Form Ready to Send
+        </div>
+        <div style="font-size:12px; color:var(--label); line-height:1.6;">
+          Your email client has opened with the completed form pre-filled.<br>
+          Please press <strong>Send</strong> to deliver to:<br>
+          <span style="color:var(--teal); font-weight:600;">
+            Bennie@vanreincompliance.com &nbsp;·&nbsp;
+            dawn@vanreincompliance.com &nbsp;·&nbsp;
+            hello@vanreincompliance.com
+          </span>
+        </div>
+      </div>`;
+  }, 800);
+}
+</script>
+
+</body>
+</html>
